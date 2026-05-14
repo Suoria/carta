@@ -1,50 +1,560 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-    <meta charset="UTF-8">
-    <title>Amor ❤️</title>
-    <link rel="stylesheet" href="style.css">
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display&family=Poppins:wght@300;400&display=swap" rel="stylesheet">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Uma lembrancinha para meu amor ♡</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Jost:wght@300;400&display=swap" rel="stylesheet" />
+  <style>
+    /* ─── VARIÁVEIS ─────────────────────────────────────────── */
+    :root {
+      --cream:   #fdf6ee;
+      --blush:   #e8c4b8;
+      --rose:    #c97b6e;
+      --wine:    #7a3b3b;
+      --dark:    #2a1a1a;
+      --gold:    #c9a96e;
+      --gold-lt: #e8d5b0;
+    }
+
+    /* ─── RESET & BASE ──────────────────────────────────────── */
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--cream);
+      color: var(--dark);
+      font-family: 'Jost', sans-serif;
+      font-weight: 300;
+      overflow-x: hidden;
+    }
+
+    /* ─── GRAIN OVERLAY ─────────────────────────────────────── */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.035'/%3E%3C/svg%3E");
+      pointer-events: none;
+      z-index: 1000;
+      opacity: .4;
+    }
+
+    /* ─── PETALS ANIMADOS ───────────────────────────────────── */
+    .petals { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 999; overflow: hidden; }
+    .petal {
+      position: absolute;
+      top: -40px;
+      font-size: clamp(10px, 2vw, 18px);
+      opacity: 0;
+      animation: fall linear infinite;
+    }
+    @keyframes fall {
+      0%   { transform: translateY(0) rotate(0deg); opacity: 0; }
+      10%  { opacity: 0.7; }
+      90%  { opacity: 0.4; }
+      100% { transform: translateY(110vh) rotate(720deg); opacity: 0; }
+    }
+
+    /* ─── HERO ──────────────────────────────────────────────── */
+    .hero {
+      min-height: 100svh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: clamp(2rem, 8vw, 6rem) clamp(1.5rem, 6vw, 4rem);
+      position: relative;
+      background:
+        radial-gradient(ellipse 80% 60% at 50% 0%, #f5e0d8 0%, transparent 70%),
+        radial-gradient(ellipse 60% 50% at 20% 100%, #ecddd5 0%, transparent 60%),
+        var(--cream);
+    }
+
+    .hero-ornament {
+      font-size: clamp(1.2rem, 4vw, 2rem);
+      color: var(--gold);
+      letter-spacing: .4em;
+      margin-bottom: 1.5rem;
+      opacity: 0;
+      animation: fadeUp .9s .3s forwards ease-out;
+    }
+
+    .hero-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(2.8rem, 10vw, 7rem);
+      font-weight: 300;
+      line-height: 1.05;
+      color: var(--wine);
+      opacity: 0;
+      animation: fadeUp .9s .55s forwards ease-out;
+    }
+
+    .hero-title em {
+      font-style: italic;
+      color: var(--rose);
+      display: block;
+    }
+
+    .hero-sub {
+      margin-top: 1.4rem;
+      font-size: clamp(.85rem, 2.5vw, 1.05rem);
+      letter-spacing: .18em;
+      text-transform: uppercase;
+      color: var(--gold);
+      opacity: 0;
+      animation: fadeUp .9s .8s forwards ease-out;
+    }
+
+    .hero-divider {
+      margin: 2.5rem auto;
+      width: clamp(80px, 20vw, 160px);
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--gold), transparent);
+      opacity: 0;
+      animation: fadeUp .9s 1s forwards ease-out;
+    }
+
+    .hero-quote {
+      font-family: 'Cormorant Garamond', serif;
+      font-style: italic;
+      font-size: clamp(1rem, 3vw, 1.4rem);
+      color: var(--rose);
+      max-width: 500px;
+      line-height: 1.7;
+      opacity: 0;
+      animation: fadeUp .9s 1.2s forwards ease-out;
+    }
+
+    .scroll-hint {
+      margin-top: 3.5rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: .5rem;
+      opacity: 0;
+      animation: fadeUp .9s 1.6s forwards ease-out;
+    }
+    .scroll-hint span { font-size: .72rem; letter-spacing: .2em; text-transform: uppercase; color: var(--gold); }
+    .scroll-arrow { width: 1px; height: 40px; background: linear-gradient(var(--gold), transparent); animation: pulse 1.8s ease-in-out infinite; }
+    @keyframes pulse { 0%,100%{opacity:.4} 50%{opacity:1} }
+
+    /* ─── FOTO ──────────────────────────────────────────────── */
+    .photo-section {
+      padding: clamp(4rem, 10vw, 8rem) clamp(1.5rem, 6vw, 4rem);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: clamp(2rem, 5vw, 4rem);
+      position: relative;
+    }
+
+    .photo-section::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 100%;
+      background: radial-gradient(ellipse 100% 70% at 50% 50%, #f0dbd4 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    .section-label {
+      font-size: .72rem;
+      letter-spacing: .3em;
+      text-transform: uppercase;
+      color: var(--gold);
+      text-align: center;
+    }
+
+    .section-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(2rem, 7vw, 4.5rem);
+      font-weight: 300;
+      color: var(--wine);
+      text-align: center;
+      line-height: 1.1;
+    }
+
+    .section-title em { font-style: italic; color: var(--rose); }
+
+    /*
+    ┌─────────────────────────────────────────────────────────────┐
+    │  📸  SUBSTITUA O CAMINHO DA FOTO AQUI                       │
+    │                                                             │
+    │  Na tag <img> abaixo, troque  src="SUA_FOTO_AQUI.jpg"       │
+    │  pelo caminho real da sua imagem, por exemplo:              │
+    │    src="foto.jpg"        (mesma pasta do index.html)        │
+    │    src="fotos/nois.jpg"  (dentro de uma pasta)             │
+    │    src="https://..."     (URL externa)                      │
+    └─────────────────────────────────────────────────────────────┘
+    */
+    .photo-frame {
+      position: relative;
+      width: min(520px, 90vw);
+    }
+
+    .photo-frame::before,
+    .photo-frame::after {
+      content: '';
+      position: absolute;
+      border: 1px solid var(--gold-lt);
+      border-radius: 2px;
+      z-index: 0;
+    }
+    .photo-frame::before { inset: -10px; }
+    .photo-frame::after  { inset: -18px; opacity: .5; }
+
+    .photo-frame img {
+      width: 100%;
+      aspect-ratio: 4/5;
+      object-fit: cover;
+      object-position: center top;
+      display: block;
+      border-radius: 2px;
+      position: relative;
+      z-index: 1;
+      filter: sepia(.08) saturate(1.1);
+      box-shadow: 0 24px 64px rgba(122,59,59,.18), 0 4px 16px rgba(0,0,0,.08);
+    }
+
+    .photo-caption {
+      text-align: center;
+      font-family: 'Cormorant Garamond', serif;
+      font-style: italic;
+      font-size: clamp(1rem, 3vw, 1.25rem);
+      color: var(--rose);
+      margin-top: 2rem;
+    }
+
+    /* ─── MENSAGEM ──────────────────────────────────────────── */
+    .message-section {
+      padding: clamp(4rem, 10vw, 8rem) clamp(1.5rem, 8vw, 6rem);
+      max-width: 780px;
+      margin: 0 auto;
+      text-align: center;
+    }
+
+    .message-section blockquote {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(1.2rem, 4vw, 2rem);
+      font-style: italic;
+      line-height: 1.8;
+      color: var(--wine);
+      position: relative;
+      padding: 2rem clamp(1rem, 4vw, 3rem);
+    }
+
+    .message-section blockquote::before,
+    .message-section blockquote::after {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 6rem;
+      line-height: 0;
+      position: absolute;
+      color: var(--blush);
+    }
+    .message-section blockquote::before { content: '\201C'; top: 2.5rem; left: 0; }
+    .message-section blockquote::after  { content: '\201D'; bottom: 0; right: 0; }
+
+    .message-author {
+      display: block;
+      margin-top: 1.5rem;
+      font-size: .8rem;
+      letter-spacing: .25em;
+      text-transform: uppercase;
+      color: var(--gold);
+    }
+
+    /* ─── TIMELINE ──────────────────────────────────────────── */
+    .timeline-section {
+      padding: clamp(4rem, 10vw, 8rem) clamp(1.5rem, 6vw, 4rem);
+      background:
+        radial-gradient(ellipse 80% 60% at 50% 50%, #f5e0d8 0%, transparent 70%),
+        var(--cream);
+    }
+
+    .timeline-header { text-align: center; margin-bottom: clamp(3rem, 8vw, 5rem); }
+
+    .timeline {
+      max-width: 620px;
+      margin: 0 auto;
+      position: relative;
+    }
+
+    .timeline::before {
+      content: '';
+      position: absolute;
+      left: 50%;
+      top: 0; bottom: 0;
+      width: 1px;
+      background: linear-gradient(var(--blush), var(--rose), var(--blush));
+      transform: translateX(-50%);
+    }
+
+    .tl-item {
+      display: flex;
+      align-items: center;
+      gap: 1.5rem;
+      margin-bottom: clamp(2rem, 5vw, 3.5rem);
+      position: relative;
+    }
+
+    .tl-item:nth-child(odd)  { flex-direction: row; }
+    .tl-item:nth-child(even) { flex-direction: row-reverse; }
+
+    .tl-dot {
+      position: absolute;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background: var(--rose);
+      border: 2px solid var(--cream);
+      box-shadow: 0 0 0 3px var(--blush);
+      flex-shrink: 0;
+      z-index: 1;
+    }
+
+    .tl-content {
+      width: calc(50% - 1.5rem);
+      background: rgba(255,255,255,.55);
+      backdrop-filter: blur(8px);
+      border: 1px solid var(--gold-lt);
+      border-radius: 4px;
+      padding: 1.2rem 1.4rem;
+    }
+
+    .tl-item:nth-child(odd)  .tl-content { text-align: right; margin-left: auto; padding-right: 2rem; }
+    .tl-item:nth-child(even) .tl-content { text-align: left;  margin-right: auto; padding-left: 2rem; }
+
+    .tl-date {
+      font-size: .7rem;
+      letter-spacing: .2em;
+      text-transform: uppercase;
+      color: var(--gold);
+    }
+
+    .tl-text {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(1rem, 2.5vw, 1.2rem);
+      color: var(--wine);
+      margin-top: .3rem;
+      line-height: 1.5;
+    }
+
+    /* ─── RODAPÉ ────────────────────────────────────────────── */
+    footer {
+      text-align: center;
+      padding: clamp(4rem, 10vw, 7rem) 2rem clamp(3rem, 8vw, 5rem);
+      position: relative;
+    }
+
+    footer::before {
+      content: '';
+      display: block;
+      width: clamp(80px, 25vw, 200px);
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--gold), transparent);
+      margin: 0 auto 3rem;
+    }
+
+    .footer-heart {
+      font-size: clamp(2rem, 8vw, 4rem);
+      animation: heartbeat 1.4s ease-in-out infinite;
+      display: block;
+      color: var(--rose);
+    }
+    @keyframes heartbeat {
+      0%,100%{ transform: scale(1); }
+      14%    { transform: scale(1.2); }
+      28%    { transform: scale(1); }
+      42%    { transform: scale(1.12); }
+      70%    { transform: scale(1); }
+    }
+
+    .footer-text {
+      font-family: 'Cormorant Garamond', serif;
+      font-style: italic;
+      font-size: clamp(1.2rem, 4vw, 2rem);
+      color: var(--wine);
+      margin-top: 1rem;
+    }
+
+    .footer-small {
+      margin-top: 1rem;
+      font-size: .75rem;
+      letter-spacing: .15em;
+      color: var(--gold);
+      text-transform: uppercase;
+    }
+
+    /* ─── ANIMAÇÕES ─────────────────────────────────────────── */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(22px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    .reveal {
+      opacity: 0;
+      transform: translateY(30px);
+      transition: opacity .8s ease, transform .8s ease;
+    }
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* ─── RESPONSIVO MOBILE ─────────────────────────────────── */
+    @media (max-width: 520px) {
+      /* timeline mobile: linha à esquerda */
+      .timeline::before { left: 20px; }
+      .tl-item { flex-direction: column !important; padding-left: 50px; }
+      .tl-dot  { left: 20px; }
+      .tl-content { width: 100% !important; text-align: left !important; padding: 1rem 1.2rem !important; margin: 0 !important; }
+
+      .message-section blockquote::before,
+      .message-section blockquote::after { font-size: 3.5rem; }
+    }
+  </style>
 </head>
 <body>
 
-    <div class="container">
+<!-- Pétalas caindo -->
+<div class="petals" id="petals"></div>
 
-        <h1>Para você, com amor ❤️</h1>
+<!-- ══════════════ HERO ══════════════ -->
+<section class="hero">
+  <div class="hero-ornament">✦ &nbsp; ✦ &nbsp; ✦</div>
+  <h1 class="hero-title">
+    Nossa<br>
+    <em>História</em>
+  </h1>
+  <p class="hero-sub">Uma vida escrita a dois</p>
+  <div class="hero-divider"></div>
+  <p class="hero-quote">
+    "Você é a melhor parte de todos os meus dias."
+  </p>
+  <div class="scroll-hint">
+    <span>Rolar</span>
+    <div class="scroll-arrow"></div>
+  </div>
+</section>
 
-        <div class="carta">
-            <p>
-                Oi, meu amor.<br><br>
-                Criei essa pequena lembrancinha só para você,  
-                para te lembrar do quanto é especial na minha vida.
-                Te amo demais meu amor e estou orgulhoso demais de você,  
-                todos os dias morro de saudades.<br><br>
+<!-- ══════════════ FOTO ══════════════ -->
+<section class="photo-section">
+  <div class="reveal">
+    <p class="section-label">Nossa foto</p>
+    <h2 class="section-title">Eu &amp; <em>você</em></h2>
+  </div>
 
-                Espero que, ao ouvir essa música e ver essas fotos,  
-                você sinta um pouquinho do amor que sinto por você. 💕
-            </p>
-        </div>
+  <div class="photo-frame reveal">
+    <!--
+      ╔══════════════════════════════════════════════════════════╗
+      ║  📸  TROQUE "SUA_FOTO_AQUI.jpg" pelo nome do seu arquivo ║
+      ║  Coloque a imagem na mesma pasta do index.html           ║
+      ║  Exemplo:  src="foto.jpg"   ou  src="fotos/nois.jpg"     ║
+      ╚══════════════════════════════════════════════════════════╝
+    -->
+    <img src="SUA_FOTO_AQUI.jpg" alt="Nossa foto" />
+  </div>
 
-        <div class="musica">
-            <p>🎶 Musica que lembrei de você</p>
-            <audio controls>
-                <source src="musica.mp3" type="audio/mpeg">
-                Seu navegador não suporta áudio.
-            </audio>
-        </div>
+  <p class="photo-caption reveal">
+    "Cada foto nossa conta uma história que eu nunca me canso de reler."
+  </p>
+</section>
 
-        <div class="fotos">
-            <img src="fotos/foto1.jpeg" alt="Foto 1">
-            <img src="fotos/foto2.jpeg" alt="Foto 2">
-            <img src="fotos/foto3.jpeg" alt="Foto 3">
-        </div>
+<!-- ══════════════ MENSAGEM ══════════════ -->
+<section class="message-section">
+  <div class="reveal">
+    <p class="section-label">Para você</p>
+    <h2 class="section-title" style="margin-bottom:2.5rem">Um <em>bilhete</em></h2>
+  </div>
+  <div class="reveal">
+    <blockquote>
+      Você chegou na minha vida de um jeito que eu nem sabia que precisava.
+      Com você aprendi que amor não é apenas sentimento, é escolha —
+      e todos os dias eu te escolho.
+      Obrigado por cada sorriso, cada abraço, cada momento nosso.
+      Você é meu lugar favorito no mundo.
+      <span class="message-author">com todo o meu amor ♡</span>
+    </blockquote>
+  </div>
+</section>
 
-        <footer>
-            <p>Feito com carinho seu Rango 💖</p>
-        </footer>
+<!-- ══════════════ TIMELINE ══════════════ -->
+<section class="timeline-section">
+  <div class="timeline-header reveal">
+    <p class="section-label">Nossa linha do tempo</p>
+    <h2 class="section-title">Momentos <em>nossos</em></h2>
+  </div>
 
+  <div class="timeline">
+
+    <div class="tl-item reveal">
+      <div class="tl-dot"></div>
+      <div class="tl-content">
+        <p class="tl-date">O começo 27/04/26</p>
+        <p class="tl-text">O dia em que a gente se conheceu e tudo mudou.</p>
+      </div>
     </div>
 
+    <div class="tl-item reveal">
+      <div class="tl-dot"></div>
+      <div class="tl-content">
+        <p class="tl-date">Primeiro encontro 30/04/26</p>
+        <p class="tl-text">Borboletas no estômago e um sorriso que não saía do rosto.</p>
+      </div>
+    </div>
+
+    <div class="tl-item reveal">
+      <div class="tl-dot"></div>
+      <div class="tl-content">
+        <p class="tl-date">Quando ♡ 01/05/2026</p>
+        <p class="tl-text">O momento em que descidimos tornar nós dois.</p>
+      </div>
+    </div>
+
+    <div class="tl-item reveal">
+      <div class="tl-dot"></div>
+      <div class="tl-content">
+        <p class="tl-date">Hoje e sempre</p>
+        <p class="tl-text">Cada dia ao seu lado é um presente que eu guardo no coração.</p>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ══════════════ FOOTER ══════════════ -->
+<footer class="reveal">
+  <span class="footer-heart">♡</span>
+  <p class="footer-text">Te amo hoje, amanhã e sempre.</p>
+  <p class="footer-small">feito com amor &nbsp;·&nbsp; Seu Chocolatão</p>
+</footer>
+
+<!-- ══════════════ SCRIPTS ══════════════ -->
+<script>
+  /* --- Pétalas caindo --- */
+  const petals = document.getElementById('petals');
+  const emojis = ['🌸','🌷','✿','❀','💮','🏵'];
+  for (let i = 0; i < 22; i++) {
+    const p = document.createElement('span');
+    p.className = 'petal';
+    p.textContent = emojis[Math.floor(Math.random() * emojis.length)];
+    p.style.left          = Math.random() * 100 + 'vw';
+    p.style.animationDuration  = (8 + Math.random() * 12) + 's';
+    p.style.animationDelay     = (Math.random() * 14) + 's';
+    p.style.fontSize      = (10 + Math.random() * 14) + 'px';
+    petals.appendChild(p);
+  }
+
+  /* --- Scroll reveal --- */
+  const obs = new IntersectionObserver(entries => {
+    entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); obs.unobserve(e.target); } });
+  }, { threshold: .15 });
+  document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
+</script>
 </body>
 </html>
-
